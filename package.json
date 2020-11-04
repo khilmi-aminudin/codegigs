@@ -1,0 +1,11 @@
+{
+  "name": "codegig",
+  "version": "1.0.0",
+  "description": "simple job find for coders",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "khilmi aminudin",
+  "license": "ISC"
+}
