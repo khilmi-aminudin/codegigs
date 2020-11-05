@@ -301,3 +301,8 @@ label {
     width: 100%;
   }
 }
+
+.invalid-input{
+  color: red;
+  font-size: 15px;
+}

@@ -23,26 +23,59 @@ router.get('/add', (req,res) => {
 
 // Add a gig
 router.post('/add', (req,res) => {
-    const data = {
-        title : 'Looking For Senior React Developer',
-        tecnologies : 'javascript, react, html, css',
-        budget : '$3000',
-        description : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-        contact_email : 'user2@gmail.com'
+    // console.log(req.body)
+    // const data = {
+    //     title : 'Looking For Senior React Developer',
+    //     tecnologies : 'javascript, react, html, css',
+    //     budget : '$3000',
+    //     description : 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+    //     contact_email : 'user2@gmail.com'
+    // }
+
+    let {title,tecnologies,budget,description,contact_email} = req.body
+    let errors = {}
+
+    // validate fields
+    if(!title){
+        errors.title =  'Please add a title'
+    }
+    if(!tecnologies){
+        errors.tecnologies = 'Please add some technologies'
+    }
+    if(!description){
+        errors.description = 'Please add a description'
+    }
+    if(!budget){
+        errors.budget = 'Please add the budget'
+    }
+    if(!contact_email){
+        errors.contact_email = 'Please add a contact_email'
     }
 
-    let {title,tecnologies,budget,description,contact_email} = data
+    const isEmptyErrors = Object.keys(errors).length === 0 && errors.constructor === Object
+    // check for errors
+    if(!isEmptyErrors){
+        res.render('add',{
+            errors,
+            title,
+            tecnologies,
+            budget,
+            description,
+            contact_email
+        })
+    }else{
+        // insert into table
+        Gig.create({
+            title,
+            tecnologies,
+            budget,
+            description,
+            contact_email
+        })
+        .then(() => res.redirect('/gigs'))
+        .catch(err => console.log(err))
+    }
 
-    // insert into table
-    Gig.create({
-        title,
-        tecnologies,
-        budget,
-        description,
-        contact_email
-    })
-    .then(gig => res.redirect('/gigs'))
-    .catch(err => console.log(err))
 })
 
 module.exports = router
